@@ -12,11 +12,15 @@ imageData = ((imageDataArray) => {
 	})
 	return imageDataArray;
 })(imageData);
-console.log(imageData);
 class ImageFigure extends React.Component {
 	render() {
+		let styleObj={};
+		if(this.props.arrange.pos){
+			styleObj=this.props.arrange.pos;
+			console.log(styleObj);
+		}
 		return (
-			<figure className="img-figure">
+			<figure className="img-figure" style={styleObj}>
 				<img src={this.props.data.url} alt={this.props.data.title}/>
 				<figcaption>
 					<h2 className="img-title">{this.props.data.title}</h2>
@@ -24,6 +28,12 @@ class ImageFigure extends React.Component {
 			</figure>
 		);
 	}
+}
+/*
+*获取区间内的随机值
+*/
+function gerRangeRandom(low,hight){
+	return Math.ceil(Math.random()*(hight-low)+low);
 }
 class AppComponent extends React.Component {
 	constructor(props) {
@@ -65,7 +75,11 @@ class AppComponent extends React.Component {
 			centerPos = Constant.centerPos,
 			hPosRange = Constant.hPosRange,
 			vPosRange = Constant.vPosRange,
-
+			hPosRangeLeftSecX=hPosRange.leftSecX,
+			hPosRangeRighrSecx=hPosRange.rightSecX,
+			hPosRangeY=hPosRange.y,
+			vPosRangeTopY=vPosRangeTopY,
+			vPosRangeX=vPosRange.x,
 			imgsArrangeTopArr = [],
 			topImgNum = Math.ceil(Math.random()),
 			topImgSpliceIndex = 0,
@@ -75,6 +89,35 @@ class AppComponent extends React.Component {
 		//取出要布局上侧的图片信息
 		topImgSpliceIndex = Math.ceil(Math.random() * (imgsArrangeArr.lengh - topImgNum));
 		imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIndex, topImgNum);
+		//布局上侧图片
+		imgsArrangeTopArr.forEach((value,index)=>{
+			imgsArrangeTopArr[index].pos={
+				top:gerRangeRandom(vPosRangeTopY[0],vPosRangeTopY[1]),
+				left:gerRangeRandom(vPosRangeX[0],vPosRangeX[1])
+			}
+		});
+		//布局左右两侧图片
+		for(let i=0,j=imgsArrangeArr.lengh,k=j/2;i<j;i++){
+			let hPosRangeLORX=null;
+			if(i<k){
+				hPosRangeLORX=hPosRangeLeftSecX;
+			}else{
+				hPosRangeLORX=hPosRangeRighrSecx;
+			}
+			imgsArrangeArr[i].pos={
+				top:gerRangeRandom(hPosRangeY[0],hPosRangeY[1]),
+				left:gerRangeRandom(hPosRangeLORX[0],hPosRangeLORX[1])
+			}
+		}
+		if(imgsArrangeTopArr&&imgsArrangeTopArr[0]){
+			imgsArrangeArr.splice(topImgSpliceIndex,0,imgsArrangeTopArr[0]);
+		}
+
+		imgsArrangeArr.splice(centerIndex,0,imgsArrangeCenterArr[0]);
+
+		this.setState({
+			imgsArrangeArr:imgsArrangeArr
+		})
 	}
 	componentDidMount() {
 		//定义舞台大小
@@ -119,7 +162,11 @@ class AppComponent extends React.Component {
 					}
 				}
 			}
-			imgFigures.push(<ImageFigure data={value} ref={'ImageFigure'+ index} />);
+			imgFigures.push(<ImageFigure
+				data={value}
+				ref={'ImageFigure'+ index}
+				arrange={this.state.imgsArrangeArr[index]}
+				/>);
 		});
 		return (
 			<section className="stage" ref="stage">
