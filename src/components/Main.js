@@ -32,9 +32,7 @@ class ImageFigure extends React.Component {
 /*
 *获取区间内的随机值
 */
-function gerRangeRandom(low,hight){
-	return Math.ceil(Math.random()*(hight-low)+low);
-}
+let gerRangeRandom=(low,high)=>Math.ceil(Math.random()*(high-low)+low);
 class AppComponent extends React.Component {
 	constructor(props) {
 			super(props);
@@ -78,10 +76,10 @@ class AppComponent extends React.Component {
 			hPosRangeLeftSecX=hPosRange.leftSecX,
 			hPosRangeRighrSecx=hPosRange.rightSecX,
 			hPosRangeY=hPosRange.y,
-			vPosRangeTopY=vPosRangeTopY,
+			vPosRangeTopY=vPosRange.topY,
 			vPosRangeX=vPosRange.x,
 			imgsArrangeTopArr = [],
-			topImgNum = Math.ceil(Math.random()),
+			topImgNum = Math.floor(Math.random()*2),
 			topImgSpliceIndex = 0,
 			imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 		//居中centerIndex
@@ -97,7 +95,7 @@ class AppComponent extends React.Component {
 			}
 		});
 		//布局左右两侧图片
-		for(let i=0,j=imgsArrangeArr.lengh,k=j/2;i<j;i++){
+		for(let i=0,j=imgsArrangeArr.length,k=j/2;i<j;i++){
 			let hPosRangeLORX=null;
 			if(i<k){
 				hPosRangeLORX=hPosRangeLeftSecX;
@@ -121,16 +119,16 @@ class AppComponent extends React.Component {
 	}
 	componentDidMount() {
 		//定义舞台大小
-		const stageDom = ReactDOM.findDomNode(this.refs.stage),
+		const stageDom = ReactDOM.findDOMNode(this.refs.stage),
 			stageW = stageDom.scrollWidth,
 			stageH = stageDom.scrollHeight,
 			halfStageW = Math.ceil(stageW / 2),
 			halfStageH = Math.ceil(stageH / 2);
 		//获取imageFigure大小
-		const imgFigureDom = ReactDOM.findDomNode(this.refs.ImageFigure0),
+		const imgFigureDom = ReactDOM.findDOMNode(this.refs.ImageFigure0),
 			imgW = imgFigureDom.scrollWidth,
 			imgH = imgFigureDom.scrollHeight,
-			halfImgW = Math.ceill(imgW / 2),
+			halfImgW = Math.ceil(imgW / 2),
 			halfImgH = Math.ceil(imgH / 2);
 		//计算中心图片位置
 		this.Constant.centerPos = {
