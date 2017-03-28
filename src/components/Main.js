@@ -12,6 +12,7 @@ imageData = ((imageDataArray) => {
 	})
 	return imageDataArray;
 })(imageData);
+console.log(imageData);
 class ImageFigure extends React.Component {
 	render() {
 		return (
@@ -59,7 +60,7 @@ class AppComponent extends React.Component {
 		 *@param 指定需要居中的图片
 		 */
 	rearrange(centerIndex) {
-		let imgsArrangeArr = this.stage.imgsArrangeArr,
+		let imgsArrangeArr = this.state.imgsArrangeArr,
 			Constant = this.Constant,
 			centerPos = Constant.centerPos,
 			hPosRange = Constant.hPosRange,
@@ -110,12 +111,12 @@ class AppComponent extends React.Component {
 		let controllerUnits = [],
 			imgFigures = [];
 		imageData.forEach((value, index) => {
-			if (!this.stage.imgsArrangeArr[index]) {
-				this.stage.imgsArrangeArr[index] = {
-					pos: [
+			if (!this.state.imgsArrangeArr[index]) {
+				this.state.imgsArrangeArr[index] = {
+					pos: {
 						left: 0,
 						right: 0
-					]
+					}
 				}
 			}
 			imgFigures.push(<ImageFigure data={value} ref={'ImageFigure'+ index} />);
