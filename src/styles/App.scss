@@ -114,7 +114,7 @@ html,body{
         }
         &.is-inverse{
           background-color: #555;
-          transform: rotateY(180deg);
+          transform: rotateY(180deg) translateZ(1px);
         }
       }
     }
